@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>hi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Tìm kiếm</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul> -->
+                    <form class="d-flex">
+                        <input class="form-control me-2" id="maVach" type="search" placeholder="Nhập mã vạch"
+                            aria-label="Search">
+                        <input class="form-control me-2" id="maHang" type="search" placeholder="Nhập mã hàng"
+                            aria-label="Search">
+                        <input class="form-control me-2" id="ten" type="search" placeholder="Nhập tên"
+                            aria-label="Search">
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <div class="table-responsive mt-5">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th class="text-center">Mã vạch</th>
+                        <th class="text-center">Mã hàng</th>
+                        <th class="text-center">Tên sản phẩm</th>
+                        <th class="text-center">Kích cỡ</th>
+                        <th class="text-center">Màu</th>
+                        <th class="text-center">Giá</th>
+                        <th class="text-center">Chương trình</th>
+                    </tr>
+                </thead>
+                <tbody id="body-table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+        integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function callApi(maHang = null, maVach = null, ten = null) {
+            const body = document.getElementById('body-table');
+            let url = 'https://lopg18.com/api/excel';
+            if (maVach && maHang && ten) {
+                url += `?ma_hang=${maHang}&ma_vach=${maVach}&ten=${ten}`;
+            } else if (maVach && maHang) {
+                url += `?ma_vach=${maVach}&ma_hang=${maHang}`;
+            } else if (maHang && ten) {
+                url += `?ma_hang=${maHang}&ten=${ten}`;
+            } else if (maVach && ten) {
+                url += `?ma_vach=${maVach}&ten=${ten}`;
+            } else if (maVach) {
+                url += `?ma_vach=${maVach}`;
+            } else if (maHang) {
+                console.log(1);
+
+                url += `?ma_hang=${maHang}`;
+            } else if (ten) {
+                url += `?ten=${ten}`;
+            }
+            axios.get(url).then(res => {
+                const data = res.data.excel.data
+                body.innerHTML = '';
+                data.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="text-center">${index}</td>
+                        <td class="text-center">${item.ma_vach}</td>
+                        <td class="text-center">${item.ma_hang}</td>
+                        <td class="text-center">${item.ten}</td>
+                        <td class="text-center">${item.kich_co}</td>
+                        <td class="text-center">${item.mau}</td>
+                        <td class="text-center">${item.gia}</td>
+                        <td class="text-center">${item.chuong_trinh}</td>
+                        `;
+                    body.appendChild(row);
+                })
+            });
+        }
+        callApi();
+
+        const maVach = document.getElementById('maVach')
+        const maHang = document.getElementById('maHang')
+        const ten = document.getElementById('ten')
+
+        maVach.addEventListener('change', handleInputChange);
+        maHang.addEventListener('change', handleInputChange);
+        ten.addEventListener('change', handleInputChange);
+
+        function handleInputChange() {
+            const inputValue = this.value.trim();
+
+            // Kiểm tra nếu ô có dữ liệu
+            if (inputValue !== '') {
+                callApi(maHang.value, maVach.value, ten.value);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
