@@ -105,6 +105,7 @@
             axios.get(url).then(res => {
                 const data = res.data.excel.data
                 body.innerHTML = '';
+                if (data.length > 0) {
                 data.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -119,6 +120,11 @@
                         `;
                     body.appendChild(row);
                 })
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = ` <td class="text-center" colspan="8">Không có sản phẩm nào</td>`
+                    body.appendChild(row);
+                }
             });
         }
         callApi();
