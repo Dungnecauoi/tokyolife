@@ -113,7 +113,7 @@
                         <td class="text-center">${item.ten}</td>
                         <td class="text-center">${item.kich_co}</td>
                         <td class="text-center">${item.mau}</td>
-                        <td class="text-center">${item.gia}</td>
+                        <td class="text-center">${item.gia.toLocaleString('en-US', { style: 'currency', currency: 'VND' })}</td>
                         <td class="text-center">${item.chuong_trinh}</td>
                         `;
                     body.appendChild(row);
