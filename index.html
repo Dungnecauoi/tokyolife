@@ -137,6 +137,8 @@
             // Kiểm tra nếu ô có dữ liệu
             if (inputValue !== '') {
                 callApi(maHang.value, maVach.value, ten.value);
+            } else {
+                callApi();
             }
         }
 
